@@ -3,23 +3,6 @@
 * **Máquinas (m):** 2 (M1, M2)
 * **Tarefas (n):** 10 (T1, T2, ..., T10)
 
-* **Coordenadas das Tarefas no Plano (x, y):**
-    A Tarefa 0 (T0) representa a origem ou o estado inicial das máquinas.
-
-| Tarefa | Coordenada (x, y) |
-| :--- | :---: |
-| T0 | (50, 50) |
-| T1 | (10, 20) |
-| T2 | (15, 85) |
-| T3 | (90, 80) |
-| T4 | (80, 10) |
-| T5 | (25, 45) |
-| T6 | (70, 95) |
-| T7 | (40, 70) |
-| T8 | (60, 30) |
-| T9 | (95, 45) |
-| T10| (55, 60) |
-
 * **Tempos de Processamento ($p_j$) em minutos:**
     * p1=28, p2=15, p3=35, p4=22, p5=40
     * p6=18, p7=25, p8=30, p9=12, p10=20
