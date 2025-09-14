@@ -1,0 +1,171 @@
+## Problema
+Trata-se de um problema de sequenciamento de 10 tarefas em 2 máquinas, onde o objetivo é minimizar o tempo total de conclusão (o *makespan*). Existem custos de tempo de preparação (setup) que dependem da ordem das tarefas, o que torna o problema mais complexo.
+
+### Adptanto o problema ao problema já conhecido de *bin packing*
+
+* **Itens (Bin Packing)** -> **Tarefas (Scheduling)**
+* **Tamanho do Item** -> **Tempo de Processamento da Tarefa**
+* **Bins (Bin Packing)** -> **Máquinas (Scheduling)**
+
+### Adaptando o Algoritmo First Fit Decreasing (FFD)
+
+A adaptação do FFD para o nosso problema de scheduling será a seguinte:
+
+1.  **Decreasing (Ordenação):** Primeiro, ordenamos as tarefas em ordem decrescente de seus tempos de processamento. A intuição é que as tarefas mais longas são mais difíceis de encaixar e devem ser alocadas primeiro para equilibrar a carga entre as máquinas.
+2.  **First Fit (Alocação):** Em seguida, pegamos as tarefas, uma a uma, na ordem decrescente, e as alocamos na máquina que terminará o trabalho mais cedo. Esta é a nossa regra "First Fit": escolher a primeira máquina (a que termina mais cedo) que pode receber a tarefa.
+
+***
+
+### Cenário A: Sem Tempos de Liberação
+
+Todas as tarefas estão disponíveis no tempo `t=0`.
+
+#### Passo 1: Ordenar as Tarefas por Tempo de Processamento (Decrescente)
+
+| Tarefa | Tempo de Processamento ($p_j$) |
+| :--- | :--- |
+| T5 | 40 |
+| T3 | 35 |
+| T8 | 30 |
+| T1 | 28 |
+| T7 | 25 |
+| T4 | 22 |
+| T10 | 20 |
+| T6 | 18 |
+| T2 | 15 |
+| T9 | 12 |
+
+#### Passo 2: Alocar as Tarefas na Máquina que Termina Primeiro
+
+Inicializamos as máquinas:
+* **Máquina 1 (M1):** Tempo Total = 0, Sequência = [], Última Tarefa = 0 (inicial)
+* **Máquina 2 (M2):** Tempo Total = 0, Sequência = [], Última Tarefa = 0 (inicial)
+
+Vamos alocar tarefa por tarefa:
+
+1.  **Tarefa T5 (p=40):**
+    * Custo em M1: $s_{0,5} + p_5 = 25 + 40 = 65$
+    * Custo em M2: $s_{0,5} + p_5 = 25 + 40 = 65$
+    * Empate. Alocamos em M1.
+    * **M1:** Tempo=65, Seq=[T5], Última=5
+
+2.  **Tarefa T3 (p=35):**
+    * Custo em M1: (Impossível, já tem T5)
+    * Custo em M2: $s_{0,3} + p_3 = 50 + 35 = 85$
+    * Alocamos em M2.
+    * **M2:** Tempo=85, Seq=[T3], Última=3
+
+3.  **Tarefa T8 (p=30):**
+    * Tempo M1 se adicionar T8: $65 + s_{5,8} + p_8 = 65 + 38 + 30 = 133$
+    * Tempo M2 se adicionar T8: $85 + s_{3,8} + p_8 = 85 + 58 + 30 = 173$
+    * M1 termina antes (133 < 173). Alocamos em M1.
+    * **M1:** Tempo=133, Seq=[T5, T8], Última=8
+
+4.  **Tarefa T1 (p=28):**
+    * Tempo M1 se adicionar T1: $133 + s_{8,1} + p_1 = 133 + 51 + 28 = 212$
+    * Tempo M2 se adicionar T1: $85 + s_{3,1} + p_1 = 85 + 92 + 28 = 205$
+    * M2 termina antes (205 < 212). Alocamos em M2.
+    * **M2:** Tempo=205, Seq=[T3, T1], Última=1
+
+5.  **Tarefa T7 (p=25):**
+    * Tempo M1 se adicionar T7: $133 + s_{8,7} + p_7 = 133 + 36 + 25 = 194$
+    * Tempo M2 se adicionar T7: $205 + s_{1,7} + p_7 = 205 + 58 + 25 = 288$
+    * M1 termina antes (194 < 288). Alocamos em M1.
+    * **M1:** Tempo=194, Seq=[T5, T8, T7], Última=7
+
+6.  **Tarefa T4 (p=22):**
+    * Tempo M1 se adicionar T4: $194 + s_{7,4} + p_4 = 194 + 72 + 22 = 288$
+    * Tempo M2 se adicionar T4: $205 + s_{1,4} + p_4 = 205 + 71 + 22 = 298$
+    * M1 termina antes (288 < 298). Alocamos em M1.
+    * **M1:** Tempo=288, Seq=[T5, T8, T7, T4], Última=4
+
+7.  **Tarefa T10 (p=20):**
+    * Tempo M1 se adicionar T10: $288 + s_{4,10} + p_{10} = 288 + 56 + 20 = 364$
+    * Tempo M2 se adicionar T10: $205 + s_{1,10} + p_{10} = 205 + 57 + 20 = 282$
+    * M2 termina antes (282 < 364). Alocamos em M2.
+    * **M2:** Tempo=282, Seq=[T3, T1, T10], Última=10
+
+8.  **Tarefa T6 (p=18):**
+    * Tempo M1 se adicionar T6: $288 + s_{4,6} + p_6 = 288 + 86 + 18 = 392$
+    * Tempo M2 se adicionar T6: $282 + s_{10,6} + p_6 = 282 + 38 + 18 = 338$
+    * M2 termina antes (338 < 392). Alocamos em M2.
+    * **M2:** Tempo=338, Seq=[T3, T1, T10, T6], Última=6
+
+9.  **Tarefa T2 (p=15):**
+    * Tempo M1 se adicionar T2: $288 + s_{4,2} + p_2 = 288 + 96 + 15 = 399$
+    * Tempo M2 se adicionar T2: $338 + s_{6,2} + p_2 = 338 + 56 + 15 = 409$
+    * M1 termina antes (399 < 409). Alocamos em M1.
+    * **M1:** Tempo=399, Seq=[T5, T8, T7, T4, T2], Última=2
+
+10. **Tarefa T9 (p=12):**
+    * Tempo M1 se adicionar T9: $399 + s_{2,9} + p_9 = 399 + 89 + 12 = 500$
+    * Tempo M2 se adicionar T9: $338 + s_{6,9} + p_9 = 338 + 34 + 12 = 384$
+    * M2 termina antes (384 < 500). Alocamos em M2.
+    * **M2:** Tempo=384, Seq=[T3, T1, T10, T6, T9], Última=9
+
+#### Solução Inicial (Cenário A)
+
+* **Máquina 1:**
+    * Sequência: **T5 -> T8 -> T7 -> T4 -> T2**
+    * Tempo Total: **399**
+* **Máquina 2:**
+    * Sequência: **T3 -> T1 -> T10 -> T6 -> T9**
+    * Tempo Total: **384**
+
+O **makespan** (tempo da máquina que termina por último) é **399**.
+
+***
+
+### Cenário B: Com Tempos de Liberação
+
+Agora, a máquina pode ficar ociosa esperando a tarefa ser liberada. O tempo de início de uma tarefa `j` será `max(tempo_atual_maquina, r_j)`.
+
+Usaremos a mesma ordem de tarefas (decrescente por tempo de processamento).
+
+1.  **Tarefa T5 (p=40, r=35):**
+    * Início em M1: `max(0, 35)` = 35. Fim: $35 + s_{0,5} + p_5 = 35 + 25 + 40 = 100$.
+    * Alocamos em M1.
+    * **M1:** Tempo=100, Seq=[T5], Última=5
+
+2.  **Tarefa T3 (p=35, r=10):**
+    * Início em M2: `max(0, 10)` = 10. Fim: $10 + s_{0,3} + p_3 = 10 + 50 + 35 = 95$.
+    * Alocamos em M2.
+    * **M2:** Tempo=95, Seq=[T3], Última=3
+
+3.  **Tarefa T8 (p=30, r=60):**
+    * Início em M1: `max(100, 60)` = 100. Fim: $100 + s_{5,8} + p_8 = 100 + 38 + 30 = 168$.
+    * Início em M2: `max(95, 60)` = 95. Fim: $95 + s_{3,8} + p_8 = 95 + 58 + 30 = 183$.
+    * M1 termina antes (168 < 183). Alocamos em M1.
+    * **M1:** Tempo=168, Seq=[T5, T8], Última=8
+
+4.  **Tarefa T1 (p=28, r=0):**
+    * Início em M1: `max(168, 0)` = 168. Fim: $168 + s_{8,1} + p_1 = 168 + 51 + 28 = 247$.
+    * Início em M2: `max(95, 0)` = 95. Fim: $95 + s_{3,1} + p_1 = 95 + 92 + 28 = 215$.
+    * M2 termina antes (215 < 247). Alocamos em M2.
+    * **M2:** Tempo=215, Seq=[T3, T1], Última=1
+
+Continuando esse processo para todas as tarefas...
+
+| Tarefa (Ordem) | Máquina Escolhida | Tempo Final M1 | Tempo Final M2 |
+| :--- | :--- | :--- | :--- |
+| **T5** (p=40, r=35) | M1 | 100 | 0 |
+| **T3** (p=35, r=10) | M2 | 100 | 95 |
+| **T8** (p=30, r=60) | M1 | 168 | 95 |
+| **T1** (p=28, r=0) | M2 | 168 | 215 |
+| **T7** (p=25, r=15) | M1 | 222 | 215 |
+| **T4** (p=22, r=0) | M2 | 222 | 315 |
+| **T10** (p=20, r=45)| M1 | 276 | 315 |
+| **T6** (p=18, r=50) | M1 | 333 | 315 |
+| **T2** (p=15, r=20) | M2 | 333 | 386 |
+| **T9** (p=12, r=5) | M1 | 434 | 386 |
+
+#### Solução Inicial (Cenário B)
+
+* **Máquina 1:**
+    * Sequência: **T5 -> T8 -> T7 -> T10 -> T6 -> T9**
+    * Tempo Total: **434**
+* **Máquina 2:**
+    * Sequência: **T3 -> T1 -> T4 -> T2**
+    * Tempo Total: **386**
+
+O **makespan** para o cenário com tempos de liberação é **434**.
