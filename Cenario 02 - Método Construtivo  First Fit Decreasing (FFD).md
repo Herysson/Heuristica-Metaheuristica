@@ -211,17 +211,13 @@ A fórmula para o tempo de conclusão de uma tarefa `j` em uma máquina `M` é:
     * M2 termina antes (358 < 495). Alocamos em M2.
     * **M2:** Tempo=358, Seq=[T3, T1, T4, T9], Última=9
 
----
-
-### Resultado Final (Cenário B)
+#### Solução Inicial (Cenário B)
 
 * **Máquina 1:**
-    * Sequência: **[T5, T8, T7, T10, T6, T2]**
-    * Tempo Total de Conclusão: **394**
+    * Sequência: **T5 -> T8 -> T7 -> T10 -> T6 -> T2**
+    * Tempo Total: **394**
 * **Máquina 2:**
-    * Sequência: **[T3, T1, T4, T9]**
-    * Tempo Total de Conclusão: **358**
+    * Sequência: **T3 -> T1 -> T4 -> T9**
+    * Tempo Total: **358**
 
-O **Makespan** é o tempo em que a última tarefa de todo o processo é concluída, ou seja, o maior dos tempos de conclusão das máquinas.
-
-**Makespan Final: max(394, 358) = 394**
+O **makespan** (tempo da máquina que termina por último) é **394**.
