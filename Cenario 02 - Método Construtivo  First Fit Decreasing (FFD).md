@@ -151,10 +151,6 @@ Usaremos a mesma ordem de tarefas (decrescente por tempo de processamento).
 A fórmula para o tempo de conclusão de uma tarefa `j` em uma máquina `M` é:
 `Tempo de Conclusão = max(Tempo Livre da Máquina, Tempo de Liberação de j) + s(última_tarefa, j) + p(j)`
 
-Claro, aqui está o passo a passo detalhado para o **Cenário B**, formatado conforme o seu exemplo.
-
-### Passo a Passo da Alocação (Cenário B)
-
 1.  **Tarefa T5 (p=40, r=35):**
     * Tempo M1 se adicionar T5: Início=max(0, 35)=35. Conclusão = $35 + s_{0,5} + p_5 = 35 + 25 + 40 = 100$
     * Tempo M2 se adicionar T5: Início=max(0, 35)=35. Conclusão = $35 + s_{0,5} + p_5 = 35 + 25 + 40 = 100$
