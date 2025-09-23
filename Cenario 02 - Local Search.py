@@ -2,6 +2,7 @@ import copy
 
 # --- Dados do Problema (Cenário 02 - 2M 10P) ---
 # (Mesmos dados da etapa anterior)
+# Melhorar dados
 processing_times = {
     1: 28, 2: 15, 3: 35, 4: 22, 5: 40,
     6: 18, 7: 25, 8: 30, 9: 12, 10: 20
@@ -193,4 +194,5 @@ def run_scenario(scenario_name, release_dates_data=None):
 
 # Executar para os dois cenários
 run_scenario("CENÁRIO A (Sem Tempos de Liberação)")
+
 run_scenario("CENÁRIO B (Com Tempos de Liberação)", release_dates)
